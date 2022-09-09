@@ -40,8 +40,8 @@ if __name__ == "__main__":
     b = pd.read_xml("../Data/B_office_data.xml")
     hr = pd.read_xml("../Data/hr_data.xml")
 
-    a.set_index(pd.Index([f"A{x}" for x in a.employee_office_id]), inplace=True)
-    b.set_index(pd.Index([f"B{x}" for x in b.employee_office_id]), inplace=True)
+    a.index = a.employee_office_id.apply(lambda x: "A" + str(x))
+    b.index = b.employee_office_id.apply(lambda x: "B" + str(x))
     hr.set_index("employee_id", inplace=True, drop=False)
     print(list(a.index))
     print(list(b.index))
