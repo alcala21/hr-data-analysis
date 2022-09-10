@@ -1,6 +1,7 @@
 import pandas as pd
 import requests
 import os
+import numpy as np
 
 # scroll down to the bottom to implement your solution
 
@@ -51,14 +52,19 @@ if __name__ == "__main__":
         .sort_index()
     )
 
+    def count_bigger_5(arr):
+        return sum(arr > 5)
+
     print(
-        df.sort_values("average_monthly_hours", ascending=False)
-        .iloc[:10]["Department"]
-        .tolist()
-    )
-    print(df.query("salary=='low' & Department=='IT'")["number_project"].sum())
-    print(
-        df.loc[
-            ["A4", "B7064", "A3033"], ["last_evaluation", "satisfaction_level"]
-        ].values.tolist()
+        df.groupby("left")
+        .agg(
+            {
+                "number_project": ["median", count_bigger_5],
+                "time_spend_company": ["mean", "median"],
+                "Work_accident": ["mean"],
+                "last_evaluation": ["mean", "std"],
+            }
+        )
+        .round(2)
+        .to_dict()
     )
