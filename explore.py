@@ -43,6 +43,12 @@ if __name__ == "__main__":
     a.index = a.employee_office_id.apply(lambda x: "A" + str(x))
     b.index = b.employee_office_id.apply(lambda x: "B" + str(x))
     hr.set_index("employee_id", inplace=True, drop=False)
-    print(list(a.index))
-    print(list(b.index))
-    print(list(hr.index))
+
+    df = (
+        pd.concat([a, b], axis=0)
+        .merge(hr, left_index=True, right_index=True)
+        .drop(["employee_office_id", "employee_id"], axis=1)
+        .sort_index()
+    )
+    print(df.index.to_list())
+    print(df.columns.to_list())
