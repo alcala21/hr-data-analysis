@@ -50,5 +50,15 @@ if __name__ == "__main__":
         .drop(["employee_office_id", "employee_id"], axis=1)
         .sort_index()
     )
-    print(df.index.to_list())
-    print(df.columns.to_list())
+
+    print(
+        df.sort_values("average_monthly_hours", ascending=False)
+        .iloc[:10]["Department"]
+        .tolist()
+    )
+    print(df.query("salary=='low' & Department=='IT'")["number_project"].sum())
+    print(
+        df.loc[
+            ["A4", "B7064", "A3033"], ["last_evaluation", "satisfaction_level"]
+        ].values.tolist()
+    )
