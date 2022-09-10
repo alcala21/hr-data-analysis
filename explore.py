@@ -52,19 +52,30 @@ if __name__ == "__main__":
         .sort_index()
     )
 
-    def count_bigger_5(arr):
-        return sum(arr > 5)
+    df2 = pd.pivot_table(
+        df,
+        index="Department",
+        columns=["left", "salary"],
+        values="average_monthly_hours",
+        aggfunc="median",
+    )
 
     print(
-        df.groupby("left")
-        .agg(
-            {
-                "number_project": ["median", count_bigger_5],
-                "time_spend_company": ["mean", "median"],
-                "Work_accident": ["mean"],
-                "last_evaluation": ["mean", "std"],
-            }
-        )
+        df2[(df2[0, "high"] < df2[0, "medium"]) | (df2[1, "low"] < df2[1, "high"])]
+        .round(2)
+        .to_dict()
+    )
+
+    df3 = pd.pivot_table(
+        df,
+        index="time_spend_company",
+        columns="promotion_last_5years",
+        values=["satisfaction_level", "last_evaluation"],
+        aggfunc=["min", "max", "mean"],
+    )
+
+    print(
+        df3[df3["mean", "last_evaluation", 0] > df3["mean", "last_evaluation", 1]]
         .round(2)
         .to_dict()
     )
